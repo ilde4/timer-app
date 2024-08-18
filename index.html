@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Timer</title>
+</head>
+<body>
+    <h1>Timer</h1>
+    <div id="timer">
+        <div class="timer-element">
+            <div class="time-input" id="minutes">00</div>
+            <div class="timer-buttons">
+                <button id="add-min" class="add-dec-time">+</button>
+                <button id="dec-min" class="add-dec-time">-</button>
+            </div>
+        </div>
+
+        <p>:</p>
+
+        <div class="timer-element">
+            <div class="time-input" id="seconds">00</div>
+            <div class="timer-buttons">
+                <button id="add-sec" class="add-dec-time">+</button>
+                <button id="dec-sec" class="add-dec-time">-</button>
+            </div>
+        </div>
+        
+        <p>:</p>
+
+        <div class="timer-element">
+            <div class="time-input" id="miliseconds">00</div>
+            <div class="timer-buttons">
+                <button  class="zeros" id="zeroize">00</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="control-buttons">
+        <button id="set-time">Set Time</button>
+        <button id="start-stop">Start|Stop</button>
+        <button id="clear">Clear</button>
+    </div>
+
+    <div class="manual-entry" id="manual-entry">
+        <h2>Enter start time</h2>
+        <div class="time-entry">
+            <div class="time-entry-block" id="enter-minutes">
+                <p>Minutes:</p>
+                <input type="number">
+            </div>
+            <div class="time-entry-block">
+                <p>Seconds:</p>
+                <input type="number" id="enter-seconds">
+            </div>
+        </div>
+        <button class="manual-entry-button" id="confirm-btn">Confirm</button>
+        <button class="manual-entry-button" id="cancel-btn">Cancel</button>
+        
+
+
+    </div>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
