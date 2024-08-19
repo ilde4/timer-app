@@ -21,6 +21,7 @@ let currentSec = 0;
 let currentMil = 0;
 let intervalId;
 let timing = false;
+let manualEntryDisplaying = false;
 
 const startCountdown = () => {
     decMil();
@@ -70,9 +71,13 @@ const addSec = () => {
 };
 
 const decSec = () => {
-    if (currentSec >= 0) {
+    if (currentSec > 0) {
         currentSec--;
         formatter(currentSec, seconds);
+    } else if (currentSec === 0 && currentMin > 0) {
+        currentSec--;
+        formatter(currentSec, seconds);
+        decMin();
     }
     if (currentSec < 0) {
         currentSec = 59;
@@ -87,22 +92,20 @@ const decSec = () => {
     }
 };
 
-
 const decMil = () => {
-    if (currentMil > 0 && (currentMin > 0 || currentSec > 0)) {
+    if (currentMil >= 0 && (currentMin > 0 || currentSec > 0)) {
         currentMil--;
         formatter(currentMil, milsec);
-    } else if (currentMil >= 0) {
+    } else if (currentMil > 0) {
         currentMil--;
         formatter(currentMil, milsec);
+    } else if (currentMil === 0 && currentSec === 0 && currentMin === 0 && timing) {
+        stopCountdown();
     }
     if (currentMil < 0 && (currentMin > 0 || currentSec > 0)) {
         currentMil = 99;
         decSec();
         formatter(currentMil, milsec);
-    }
-    if (currentMil === 0 && currentSec === 0 && currentMin === 0 && timing) {
-        stopCountdown();
     }
 };
 
@@ -116,6 +119,46 @@ const clearTime = () => {
     if (timing) {
         stopCountdown();
     }
+};
+
+const manuallyEnterTime = () => {
+    if (enterMinutes.value) {
+        currentMin = parseInt(enterMinutes.value);
+        formatter(currentMin, minutes);
+    } else {
+        currentMin = 0;
+        formatter(currentMin, minutes);
+    }
+    if (enterSeconds.value) {
+        currentSec = parseInt(enterSeconds.value);
+        formatter(currentSec, seconds);
+    } else {
+        currentSec = 0;
+        formatter(currentSec, seconds);
+    }
+    if (currentMil) {
+        currentMil = 0;
+        formatter(currentMil, milsec);
+    }
+};
+
+const openManualEntry = () => {
+    if (timing) {
+        stopCountdown();
+        timing = true;
+    }
+    manualEntry.style.display = "block";
+    manualEntryDisplaying = true;
+};
+
+const closeManualEntry = () => {
+    manualEntry.style.display = "none";
+    manualEntryDisplaying = false;
+};
+
+const clearManualEntry = () => {
+    enterMinutes.value = "";
+    enterSeconds.value = "";
 };
 
 addMinBtn.addEventListener("click", () => {
@@ -149,20 +192,33 @@ starStoptBtn.addEventListener("click", () => {
     if (timing) {
         stopCountdown();
     } else if (currentMil === 0 && currentMin === 0 && currentSec === 0) {
-        
+        // Does nothing
     } else {
         startCountdown();
     }
 });
 
 setTime.addEventListener("click", () => {
-    if (manualEntry.style.display === "block") {
-        manualEntry.style.display = "none";
+    if (manualEntryDisplaying) {
+        closeManualEntry();
     } else {
-        manualEntry.style.display = "block";
+        openManualEntry();
     }
 });
 
 confirmBtn.addEventListener("click", () => {
-    currentMin = enterMinutes.value;
+    manuallyEnterTime();
+    closeManualEntry();
+    clearManualEntry();
+    if (timing) {
+        stopCountdown();
+    }
+});
+
+cancelBtn.addEventListener("click", () => {
+    closeManualEntry();
+    clearManualEntry();
+    if (timing) {
+        startCountdown();
+    }
 });
