@@ -15,7 +15,6 @@ const enterSeconds = document.getElementById("enter-seconds");
 const confirmBtn = document.getElementById("confirm-btn");
 const cancelBtn = document.getElementById("cancel-btn");
 
-
 let currentMin = 0;
 let currentSec = 0;
 let currentMil = 0;
@@ -70,7 +69,6 @@ const addSec = () => {
 };
 
 const decSec = () => {
-    debugger
     if (currentSec > 0) {
         currentSec--;
         updateTimerBlock(currentSec, seconds);
@@ -194,7 +192,7 @@ starStoptBtn.addEventListener("click", () => {
     if (timing) {
         stopCountdown();
     } else if (currentMil === 0 && currentMin === 0 && currentSec === 0) {
-        // Does nothing
+        // Do nothing
     } else {
         startCountdown();
     }
