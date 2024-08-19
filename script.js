@@ -24,19 +24,18 @@ let timing = false;
 let manualEntryDisplaying = false;
 
 const startCountdown = () => {
+    timing = true;
     decMil();
     intervalId = setInterval(decMil, 10);
-    timing = true;
-
 };
 
 const stopCountdown = () => {
     clearInterval(intervalId);
     timing = false;
-    formatter(currentMil, milsec);
+    updateTimerBlock(currentMil, milsec);
 };
 
-function formatter(currentTime, unit) {
+function updateTimerBlock(currentTime, unit) {
     unit.innerText = `${currentTime}`.length === 1 ? `0${currentTime}` : currentTime;
 }
 
@@ -46,14 +45,14 @@ const addMin = () => {
         minutes.innerText = "00";
     } else {
         currentMin++;
-        formatter(currentMin, minutes)
+        updateTimerBlock(currentMin, minutes)
     }
 };
 
 const decMin = () => {
     if (currentMin > 0) {
         currentMin--;
-        formatter(currentMin, minutes);
+        updateTimerBlock(currentMin, minutes);
     }
 };
 
@@ -66,46 +65,49 @@ const addSec = () => {
         }
     } else {
         currentSec++;
-        formatter(currentSec, seconds);
+        updateTimerBlock(currentSec, seconds);
     }
 };
 
 const decSec = () => {
+    debugger
     if (currentSec > 0) {
         currentSec--;
-        formatter(currentSec, seconds);
+        updateTimerBlock(currentSec, seconds);
+    } else if (currentSec === 0 && currentMin > 0 && timing) {
+        currentSec--;
+        updateTimerBlock(currentSec, seconds);
     } else if (currentSec === 0 && currentMin > 0) {
         currentSec--;
-        formatter(currentSec, seconds);
-        decMin();
+        updateTimerBlock(currentSec, seconds);
     }
     if (currentSec < 0) {
         currentSec = 59;
-        formatter(currentSec, seconds);
+        updateTimerBlock(currentSec, seconds);
         if (currentMin > 0 && timing) {
             decMin();
         }
     }
     if (currentMin > 0 && currentSec === 59 && currentMil === 0 && timing) {
         decMin();
-        formatter(currentSec, seconds);
+        updateTimerBlock(currentSec, seconds);
     }
 };
 
 const decMil = () => {
     if (currentMil >= 0 && (currentMin > 0 || currentSec > 0)) {
         currentMil--;
-        formatter(currentMil, milsec);
+        updateTimerBlock(currentMil, milsec);
     } else if (currentMil > 0) {
         currentMil--;
-        formatter(currentMil, milsec);
+        updateTimerBlock(currentMil, milsec);
     } else if (currentMil === 0 && currentSec === 0 && currentMin === 0 && timing) {
         stopCountdown();
     }
     if (currentMil < 0 && (currentMin > 0 || currentSec > 0)) {
         currentMil = 99;
         decSec();
-        formatter(currentMil, milsec);
+        updateTimerBlock(currentMil, milsec);
     }
 };
 
@@ -124,21 +126,21 @@ const clearTime = () => {
 const manuallyEnterTime = () => {
     if (enterMinutes.value) {
         currentMin = parseInt(enterMinutes.value);
-        formatter(currentMin, minutes);
+        updateTimerBlock(currentMin, minutes);
     } else {
         currentMin = 0;
-        formatter(currentMin, minutes);
+        updateTimerBlock(currentMin, minutes);
     }
     if (enterSeconds.value) {
         currentSec = parseInt(enterSeconds.value);
-        formatter(currentSec, seconds);
+        updateTimerBlock(currentSec, seconds);
     } else {
         currentSec = 0;
-        formatter(currentSec, seconds);
+        updateTimerBlock(currentSec, seconds);
     }
     if (currentMil) {
         currentMil = 0;
-        formatter(currentMil, milsec);
+        updateTimerBlock(currentMil, milsec);
     }
 };
 
@@ -184,7 +186,7 @@ clear.addEventListener("click", () => {
 zeroizeBtn.addEventListener("click", () => {
     if (!timing) {
         currentMil = 0;
-        formatter(currentMil, milsec);
+        updateTimerBlock(currentMil, milsec);
     }
 });
 
@@ -220,5 +222,27 @@ cancelBtn.addEventListener("click", () => {
     clearManualEntry();
     if (timing) {
         startCountdown();
+    }
+});
+
+enterMinutes.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+        manuallyEnterTime();
+        closeManualEntry();
+        clearManualEntry();
+        if (timing) {
+            stopCountdown();
+        }
+    }
+});
+
+enterSeconds.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+        manuallyEnterTime();
+        closeManualEntry();
+        clearManualEntry();
+        if (timing) {
+            stopCountdown();
+        }
     }
 });
