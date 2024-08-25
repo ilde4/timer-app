@@ -161,6 +161,15 @@ const clearManualEntry = () => {
     enterSeconds.value = "";
 };
 
+const checkNumber = (input) => {
+    const regex = /^\d+$/
+    if (input.value === "") {
+        return true
+    } else {
+        return regex.test(input.value);
+    }
+};
+
 addMinBtn.addEventListener("click", () => {
     addMin();
 });
@@ -207,11 +216,15 @@ setTime.addEventListener("click", () => {
 });
 
 confirmBtn.addEventListener("click", () => {
-    manuallyEnterTime();
-    closeManualEntry();
-    clearManualEntry();
-    if (timing) {
-        stopCountdown();
+    if (checkNumber(enterMinutes) && checkNumber(enterSeconds)) {
+        manuallyEnterTime();
+        closeManualEntry();
+        clearManualEntry();
+        if (timing) {
+            stopCountdown();
+        }
+    } else {
+        alert("Please enter positive whole numbers only.")
     }
 });
 
