@@ -14,6 +14,7 @@ const enterMinutes = document.getElementById("enter-minutes");
 const enterSeconds = document.getElementById("enter-seconds");
 const confirmBtn = document.getElementById("confirm-btn");
 const cancelBtn = document.getElementById("cancel-btn");
+const exitManualEntry = document.getElementById('close-manual-entry');
 
 let currentMin = 0;
 let currentSec = 0;
@@ -161,15 +162,6 @@ const clearManualEntry = () => {
     enterSeconds.value = "";
 };
 
-const checkNumber = (input) => {
-    const regex = /^\d+$/
-    if (input.value === "") {
-        return true
-    } else {
-        return regex.test(input.value);
-    }
-};
-
 addMinBtn.addEventListener("click", () => {
     addMin();
 });
@@ -216,15 +208,11 @@ setTime.addEventListener("click", () => {
 });
 
 confirmBtn.addEventListener("click", () => {
-    if (checkNumber(enterMinutes) && checkNumber(enterSeconds)) {
-        manuallyEnterTime();
-        closeManualEntry();
-        clearManualEntry();
-        if (timing) {
-            stopCountdown();
-        }
-    } else {
-        alert("Please enter positive whole numbers only.")
+    manuallyEnterTime();
+    closeManualEntry();
+    clearManualEntry();
+    if (timing) {
+        stopCountdown();
     }
 });
 
@@ -255,5 +243,46 @@ enterSeconds.addEventListener("keydown", e => {
         if (timing) {
             stopCountdown();
         }
+    }
+});
+
+exitManualEntry.addEventListener('click', () => {
+    closeManualEntry();
+    clearManualEntry();
+    if (timing) {
+        startCountdown();
+    }
+});
+
+// This section handles the drag logic
+
+const drag = document.getElementById('drag');
+
+let currTop = 0;
+let currLeft = 0;
+let offsetTop = 0;
+let offsetLeft = 0;
+let mousedown = false;
+
+const updatePosition = (input) => {
+    currTop = input.pageY;
+    currLeft = input.pageX;
+    manualEntry.style.top = currTop - offsetTop + "px";
+    manualEntry.style.left = currLeft - offsetLeft + "px";    
+};
+
+drag.addEventListener('mousedown', (input) => {
+    mousedown = true;
+    offsetTop = input.pageY - currTop + offsetTop;
+    offsetLeft = input.pageX - currLeft + offsetLeft;
+});
+
+drag.addEventListener('mouseup', (input) => {
+    mousedown = false;
+});
+
+drag.addEventListener('mousemove', (input) => {
+    if (mousedown) {
+        updatePosition(input);
     }
 });

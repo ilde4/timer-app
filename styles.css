@@ -116,13 +116,13 @@ input::-webkit-inner-spin-button {
 }
 
 .manual-entry {
-    display: none;
     position: absolute;
-    bottom: 40px;
+    top: 0;
+    left: 0;
+    display: none;
     background-color: var(--time-bg);
     height: fit-content;
-    width: fit-content;
-    padding: 10px;
+    width: 230px;
     text-align: center;
     border-radius: 5px;
     border: 3px solid darkblue;
@@ -130,6 +130,7 @@ input::-webkit-inner-spin-button {
 
 .time-entry {
     display: flex;
+    justify-content: space-evenly;
 }
 
 .time-entry-block {
@@ -156,4 +157,35 @@ input::-webkit-inner-spin-button {
     border-radius: 5px;
     border: 2px solid darkblue;
     font-family: monospace;
+    margin-bottom: 10px;
+}
+
+#drag {
+    width: 23%;
+    height: 20px;
+    background-color: rgb(146, 0, 0);
+    border-right: 1px solid darkblue;
+    border-bottom: 1px solid darkblue;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+#drag:hover {
+    cursor: move;
+}
+
+#close-manual-entry {
+    width: 10%;
+    height: 20px;
+    background-color: rgb(146, 0, 0);
+    border-left: 1px solid darkblue;
+    border-bottom: 1px solid darkblue;
+    position: relative;
+    top: -20px;
+    right: -90%;
+}
+
+#close-manual-entry:hover {
+    cursor: pointer;
 }
