@@ -263,6 +263,7 @@ let currLeft = 0;
 let offsetTop = 0;
 let offsetLeft = 0;
 let mousedown = false;
+let dragging = false;
 
 const updatePosition = (input) => {
     currTop = input.pageY;
@@ -273,6 +274,7 @@ const updatePosition = (input) => {
 
 drag.addEventListener('mousedown', (input) => {
     mousedown = true;
+    dragging = true;
     offsetTop = input.pageY - currTop + offsetTop;
     offsetLeft = input.pageX - currLeft + offsetLeft;
 });
@@ -286,3 +288,13 @@ drag.addEventListener('mousemove', (input) => {
         updatePosition(input);
     }
 });
+
+document.addEventListener('mouseup', () => {
+    mousedown = false;
+});
+
+document.addEventListener('mousemove', (input) => {
+    if (mousedown && dragging) {
+        updatePosition(input);
+    }
+})

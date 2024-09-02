@@ -16,6 +16,7 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     background: linear-gradient(rgb(40, 40, 80), rgb(0, 0, 40));
     color: white;
+    overflow: hidden;
 }
 
 h1 {
